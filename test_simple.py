@@ -4,7 +4,8 @@ Simple test script to verify the basic ToDoist tools and agent setup.
 """
 
 from tools.todoist_tools import get_open_tasks, create_task
-from agents.todoist_tool_agent import todoist_tool_agent
+from agents.prioritization_agent import prioritization_agent
+from agents.project_manager_agent import project_manager_agent
 
 
 def test_tools():
@@ -29,15 +30,25 @@ def test_tools():
     print(f"Task details: {new_task}")
 
 
-def test_agent():
-    """Test the ToDoistToolAgent."""
-    print("\nTesting ToDoistToolAgent...")
-    print(f"Agent name: {todoist_tool_agent.name}")
-    print(f"Agent description: {todoist_tool_agent.description}")
-    print(f"Number of tools: {len(todoist_tool_agent.tools)}")
+def test_agents():
+    """Test the agents that use ToDoist tools."""
+    print("\nTesting Agents with ToDoist Tools...")
     
-    for i, tool in enumerate(todoist_tool_agent.tools):
-        print(f"  Tool {i+1}: {tool.__name__}")
+    # Test PrioritizationAgent
+    print(f"\nPrioritizationAgent:")
+    print(f"  Name: {prioritization_agent.name}")
+    print(f"  Description: {prioritization_agent.description}")
+    print(f"  Number of tools: {len(prioritization_agent.tools)}")
+    for i, tool in enumerate(prioritization_agent.tools):
+        print(f"    Tool {i+1}: {tool.__name__}")
+    
+    # Test ProjectManagerAgent
+    print(f"\nProjectManagerAgent:")
+    print(f"  Name: {project_manager_agent.name}")
+    print(f"  Description: {project_manager_agent.description}")
+    print(f"  Number of tools: {len(project_manager_agent.tools)}")
+    for i, tool in enumerate(project_manager_agent.tools):
+        print(f"    Tool {i+1}: {tool.__name__}")
 
 
 if __name__ == "__main__":
@@ -45,7 +56,7 @@ if __name__ == "__main__":
     
     try:
         test_tools()
-        test_agent()
+        test_agents()
         print("\n✅ All tests passed! Basic setup is working.")
     except Exception as e:
         print(f"\n❌ Test failed with error: {e}")
