@@ -40,10 +40,11 @@ smart_prioritization_agent = Agent(
         "   - Add their responses as comments to the task using add_task_comment\n"
         "   - Update the task with any new information using update_task\n\n"
         
-        "4. **Task Breakdown**: If a task is too large (>4 hours estimated effort):\n"
-        "   - Suggest breaking it down into smaller subtasks\n"
-        "   - Ask the user to help break it down\n"
-        "   - Create the smaller tasks using create_task\n\n"
+        "4. **Task Breakdown**:\n"
+        "   - If a task's estimated effort is large (>4 hours):\n"
+        "     a. First, use `get_task_details` to check if it has existing subtasks.\n"
+        "     b. **If subtasks exist**: Analyze each subtask. If any subtask has an estimated effort of large (>4 hours), suggest breaking down *that specific subtask*. Ask the user for help and use `create_task` to create further sub-subtasks under it.\n"
+        "     c. **If no subtasks exist**: Suggest breaking down the parent task into smaller subtasks. Ask the user for help and use `create_task` to create these new subtasks.\n\n"
         
         "5. **Smart Prioritization**: Based on gathered context, prioritize tasks considering:\n"
         "   - **Business Impact**: High impact tasks get higher priority\n"
