@@ -12,10 +12,11 @@ This architecture employs a hierarchical, multi-agent system designed for clear 
 
 **Role:** The primary entry point for all user requests. Its sole responsibility is to analyze the user's high-level goal and delegate it to the appropriate Reasoning Agent.
 
-**Sub-Agents:** PrioritizationAgent, ProjectManagerAgent
+**Sub-Agents:** PrioritizationAgent, SmartPrioritizationAgent, ProjectManagerAgent
 
 **Instructions:**
 - If the user asks for their priorities or wants to know what to work on, delegate to the PrioritizationAgent
+- If the user wants to groom the backlog, analyze tasks, gather context, or mentions smart prioritization, delegate to the SmartPrioritizationAgent
 - If the user wants to plan a project, break down a goal, or create multiple tasks, delegate to the ProjectManagerAgent
 - It should not attempt to answer questions or use tools directly
 
@@ -25,7 +26,7 @@ These agents are responsible for thought and planning. They break down a high-le
 #### Prioritization Agent
 **Name:** PrioritizationAgent
 
-**Role:** Analyzes user tasks to determine priorities.
+**Role:** Analyzes user tasks to determine priorities based on due dates and existing priorities.
 
 **Tools:** get_open_tasks, create_task
 
@@ -34,6 +35,22 @@ These agents are responsible for thought and planning. They break down a high-le
 - To do this, you must first get the list of open tasks from the Work project using the get_open_tasks tool
 - Once you receive the list of tasks, analyze it based on due dates and priority flags
 - Formulate a final, user-facing summary of the recommended priorities
+
+#### Smart Prioritization Agent
+**Name:** SmartPrioritizationAgent
+
+**Role:** Intelligent backlog grooming with context gathering and smart prioritization.
+
+**Tools:** get_open_tasks, get_task_details, add_task_comment, update_task, create_task
+
+**Instructions:**
+- Conduct interactive backlog grooming sessions to gather missing context
+- Analyze tasks for business impact, dependencies, and effort estimation
+- Ask users for additional context when tasks lack sufficient information
+- Break down large tasks (>4 hours) into smaller, manageable pieces
+- Provide intelligent prioritization based on business impact and dependencies rather than just due dates
+- Always ask for approval before updating tasks
+- Use comments to track context and decisions
 
 #### Project Manager Agent
 **Name:** ProjectManagerAgent
@@ -59,6 +76,51 @@ These are the Python functions that grant the agents their ToDoist abilities.
 
 **Returns:** A list of task objects with all their details (id, content, priority, due date, description, etc.)
 
+### get_task_details(task_id: str)
+**Description:** Gets comprehensive details for a specific task including comments and subtasks.
+
+**Arguments:**
+- task_id (str): The ID of the task to get details for
+
+**Returns:** Comprehensive task details including comments and subtasks
+
+### get_task_comments(task_id: str)
+**Description:** Fetches all comments for a specific task.
+
+**Arguments:**
+- task_id (str): The ID of the task to get comments for
+
+**Returns:** A list of comment objects
+
+### get_task_subtasks(task_id: str)
+**Description:** Fetches all subtasks for a specific task.
+
+**Arguments:**
+- task_id (str): The ID of the task to get subtasks for
+
+**Returns:** A list of subtask objects
+
+### add_task_comment(task_id: str, content: str)
+**Description:** Adds a comment to a specific task.
+
+**Arguments:**
+- task_id (str): The ID of the task to add a comment to
+- content (str): The content of the comment
+
+**Returns:** The created comment object
+
+### update_task(task_id: str, content: Optional[str] = None, priority: Optional[int] = None, description: Optional[str] = None, due_string: Optional[str] = None)
+**Description:** Updates a specific task with the provided changes.
+
+**Arguments:**
+- task_id (str): The ID of the task to update
+- content (Optional[str]): New content/title for the task
+- priority (Optional[int]): New priority level (1=Normal, 2=Medium, 3=High, 4=Urgent)
+- description (Optional[str]): New description for the task
+- due_string (Optional[str]): New due date as human-readable string (e.g., "tomorrow at 5pm")
+
+**Returns:** The updated task object
+
 ### create_task(project_name: str, content: str, due_string: str, priority: int, description: str = "")
 **Description:** Creates a new task in the "Work" project in ToDoist.
 
@@ -83,6 +145,7 @@ TaskAgent/
 │   ├── __init__.py
 │   ├── coordinator_agent.py
 │   ├── prioritization_agent.py
+│   ├── smart_prioritization_agent.py
 │   └── project_manager_agent.py
 ├── tools/
 │   ├── __init__.py
@@ -133,16 +196,31 @@ adk web
 This will open a web browser where you can interact with your multi-agent system.
 
 ### Example Interactions
-- **"What are my priorities today?"** - Gets your top 3-5 tasks from the Work project
+- **"What are my priorities today?"** - Gets your top 3-5 tasks from the Work project (basic prioritization)
+- **"Groom my backlog"** - Interactive session to analyze tasks, gather context, and provide smart prioritization
+- **"Analyze my tasks"** - Smart analysis with context gathering for better prioritization
 - **"Plan a product launch"** - Breaks down the goal into actionable tasks in your Work project
 - **"What should I work on?"** - Analyzes your tasks and provides recommendations
 
 ## Key Features
 - **Work Project Focus:** All tasks are managed within a dedicated "Work" project in ToDoist
 - **Real-time Integration:** Direct API calls to ToDoist for live task data
-- **Intelligent Prioritization:** AI-powered analysis of due dates and priorities
+- **Intelligent Prioritization:** AI-powered analysis of business impact, dependencies, and effort
+- **Interactive Backlog Grooming:** Context gathering sessions to improve task understanding
+- **Task Breakdown:** Automatic identification and breakdown of large tasks
+- **Smart Context Management:** Comments and updates to track decisions and context
 - **Project Planning:** Automatic breakdown of complex goals into actionable tasks
 - **Web Interface:** Easy-to-use chat interface powered by Google ADK
+
+## Smart Prioritization Features
+The SmartPrioritizationAgent provides advanced backlog grooming capabilities:
+
+- **Context Analysis:** Identifies tasks missing business impact, effort estimation, or dependency information
+- **Interactive Gathering:** Asks specific questions to gather missing context
+- **Task Breakdown:** Suggests breaking down large tasks (>4 hours) into smaller pieces
+- **Business-Focused Prioritization:** Prioritizes based on business impact and dependencies rather than just due dates
+- **Approval Workflow:** Always asks for approval before making task updates
+- **Context Tracking:** Uses comments to maintain history of decisions and context
 
 ## Error Handling
 The system includes robust error handling:
@@ -155,3 +233,5 @@ The system includes robust error handling:
 - Integrate with calendar systems
 - Add email integration for task notifications
 - Support for task dependencies and subtasks
+- Audit the agents for appropriate models
+- In grooming sessions, implicitly get task hierarchy. Currently, it doesn't recognize if a task is a subtask or if it contains subtasks.
