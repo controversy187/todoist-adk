@@ -10,7 +10,7 @@ from agents.project_manager_agent import project_manager_agent
 
 coordinator_agent = Agent(
     name="TeamCoordinator",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     description="Primary coordinator that routes user requests to appropriate agents",
     instruction=(
         "You are the primary entry point for all user requests. "

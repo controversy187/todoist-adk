@@ -8,7 +8,7 @@ from tools.todoist_tools import get_open_tasks, create_task
 
 prioritization_agent = Agent(
     name="PrioritizationAgent",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-flash",
     description="Agent that analyzes tasks and determines user priorities",
     instruction=(
         "Your goal is to provide the user with their top 3-5 priorities. "

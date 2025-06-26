@@ -8,7 +8,7 @@ from tools.todoist_tools import get_open_tasks, create_task
 
 project_manager_agent = Agent(
     name="ProjectManagerAgent",
-    model="gemini-2.0-flash",
+    model="gemini-2.5-pro",
     description="Agent that breaks down complex goals into actionable tasks",
     instruction=(
         "Your purpose is to take a complex user goal (e.g., 'Plan my product launch') "
