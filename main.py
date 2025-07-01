@@ -1,4 +1,4 @@
 # main.py
-from agents.coordinator_agent import coordinator_agent
+from agents.agents import coordinator
 
-agent = coordinator_agent
+agent = coordinator

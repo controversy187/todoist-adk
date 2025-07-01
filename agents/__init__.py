@@ -1,5 +1,5 @@
-# Agents package for multi-agent system 
-from .coordinator_agent import coordinator_agent
+# Agents package for multi-agent system
+from .agents import coordinator
 
 # Expose the coordinator as the root agent for ADK web
-root_agent = coordinator_agent 
+root_agent = coordinator
