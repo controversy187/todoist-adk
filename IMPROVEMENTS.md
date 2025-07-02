@@ -12,7 +12,6 @@ This document outlines the planned improvements for the Task Agent project.
 ## Phase 2: Feature Enhancements
 
 - [x] **Add a 'morning briefing' feature**: Create a new agent that provides a summary of the day's priorities.
-- [x] **Introduce a 'focus mode'**: This mode will help users concentrate on a single task by hiding all other tasks.
 - [x] **Integrate with Google Calendar**: Add the ability to sync ToDoist tasks with Google Calendar.
 
 ## Phase 3: Bug Fixes and Performance

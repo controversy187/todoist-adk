@@ -27,7 +27,11 @@ prioritization = Agent(
     name="PrioritizationAgent",
     model="gemini-2.5-flash",
     description="Agent that analyzes tasks and determines user priorities",
-    instruction="""Your goal is to provide the user with their top 3-5 priorities. To do this, you must first get the list of open tasks from the Work project. Use the get_open_tasks tool to retrieve tasks. Once you receive the list of tasks, analyze it based on due dates and priority flags. Formulate a final, user-facing summary of the recommended priorities.""",
+    instruction="""Your goal is to provide the user with their top 3-5 priorities. To do this, you must first get the list of open tasks from the Work project. Use the get_open_tasks tool to retrieve tasks. Once you receive the list of tasks, analyze it based on due dates and priority flags. Formulate a final, user-facing summary of the recommended priorities.
+
+**Task Management Guidelines:**
+- **Task Descriptions**: Use the task description field to store context, background information, requirements, and any static information that helps understand what the task is about.
+- **Task Comments**: Use comments to record actions taken, progress updates, decisions made, and any dynamic information that shows the history of work on the task.""",
     tools=[get_open_tasks, create_task],
 )
 
@@ -35,7 +39,11 @@ project_manager = Agent(
     name="ProjectManagerAgent",
     model="gemini-2.5-pro",
     description="Agent that breaks down complex goals into actionable tasks",
-    instruction="""Your purpose is to take a complex user goal (e.g., 'Plan my product launch') and break it down into a list of specific, actionable tasks. For each task you devise, use the create_task tool to create it in the Work project, providing a clear title, description, and a reasonable due date. All tasks will be created in the Work project. After creating all tasks, confirm with the user that the project plan has been created in ToDoist.""",
+    instruction="""Your purpose is to take a complex user goal (e.g., 'Plan my product launch') and break it down into a list of specific, actionable tasks. For each task you devise, use the create_task tool to create it in the Work project, providing a clear title, description, and a reasonable due date. All tasks will be created in the Work project. After creating all tasks, confirm with the user that the project plan has been created in ToDoist.
+
+**Task Management Guidelines:**
+- **Task Descriptions**: Place all context, requirements, background information, and static details about what the task involves in the task description field. This should include any information someone would need to understand what the task is about.
+- **Task Comments**: Reserve comments for tracking actions taken, progress updates, decisions made during execution, and any dynamic information that shows the history of work on the task.""",
     tools=[get_open_tasks, create_task],
 )
 
@@ -44,6 +52,10 @@ smart_prioritization = Agent(
     model="gemini-2.5-pro", # Or gemini-1.5-pro
     description="Intelligent agent that grooms your backlog using Recency, Impact, and Next-Action Effort to prioritize.",
     instruction="""You are an expert project management assistant. Your goal is to help the user prioritize their daily work by ensuring nothing slips through the cracks and that they are always focused on the most impactful next action.
+
+**Task Management Guidelines:**
+- **Task Descriptions**: Use the task description field to store context, background information, requirements, and any static information that helps understand what the task is about. When gathering context during our conversation, update the task description with this information.
+- **Task Comments**: Use comments to record actions taken, progress updates, decisions made during our prioritization session, and any dynamic information that shows the history of work on the task. When you ask questions and get answers, record those interactions as comments.
 
 **Your Process (RIN Framework: Recency, Impact, Next-Action Effort):**
 1. **Analyze Tasks**: Get all open tasks from the Work project using `get_open_tasks`.
@@ -61,6 +73,7 @@ smart_prioritization = Agent(
      - 'What is the very next, single, physical action required to move this forward?' (e.g., 'Draft the email to stakeholder X', 'Review the PR from Jane', 'Schedule the 30-min meeting with the team')
      - 'How long will that specific action take? (<30 mins, 1-2 hours, half-day)'
    - Record the user's answers using `add_task_comment` to build a history of the task.
+   - Update the task description with any new context or requirements discovered during our conversation.
 
 4. **Task Breakdown**: If the identified 'next action' is still too large (e.g., > 4 hours), suggest breaking it down further. 
    - Say: 'The next action of "Plan Q3 offsite" seems large. Can we break that down into smaller steps like "Draft agenda", "Book venue", and "Send invitations"?'
@@ -111,20 +124,6 @@ morning_briefing = Agent(
     sub_agents=[prioritization],
 )
 
-focus_mode = Agent(
-    name="FocusModeAgent",
-    model="gemini-2.5-flash",
-    description="Helps the user focus on a single task by hiding all other tasks.",
-    instruction="""Your goal is to help the user focus on a single task. You will ask the user which task they want to focus on. Then, you will create a new project called 'Hidden' and move all other tasks from the 'Work' project to the 'Hidden' project. When the user is finished with their focus session, you will move all the tasks from the 'Hidden' project back to the 'Work' project and delete the 'Hidden' project.
-    """,
-    tools=[
-        get_open_tasks,
-        create_project,
-        move_task_to_project,
-        delete_project,
-    ],
-)
-
 google_calendar = Agent(
     name="GoogleCalendarAgent",
     model="gemini-2.5-flash",
@@ -152,15 +151,12 @@ coordinator = Agent(
 - If the user asks for their priorities, wants to know what to work on, or mentions 'prioritization', delegate to the PrioritizationAgent
 - If the user wants to 'groom the backlog', 'analyze tasks', 'gather context', or mentions 'smart prioritization', delegate to the SmartPrioritizationAgent
 - If the user wants to plan a project, break down a goal, or create multiple tasks, delegate to the ProjectManagerAgent
-- If the user wants to 'focus' or 'concentrate', delegate to the FocusModeAgent.
-- If the user mentions 'calendar' or 'event', delegate to the GoogleCalendarAgent.
 
 **Agent Capabilities:**
 - **MorningBriefingAgent**: Provides a concise summary of the day's top priorities.
 - **PrioritizationAgent**: Basic priority analysis based on due dates and existing priorities
 - **SmartPrioritizationAgent**: Advanced backlog grooming with context gathering, task breakdown, and intelligent prioritization based on business impact and dependencies
 - **ProjectManagerAgent**: Project planning and task creation
-- **FocusModeAgent**: Helps the user focus on a single task by hiding all other tasks.
 - **GoogleCalendarAgent**: Manages Google Calendar events.
 
 You should not attempt to answer questions or use tools directly.""",
@@ -168,7 +164,6 @@ You should not attempt to answer questions or use tools directly.""",
         smart_prioritization,
         project_manager,
         morning_briefing,
-        focus_mode,
         google_calendar,
     ],
 )

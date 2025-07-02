@@ -8,7 +8,6 @@ from agents.agents import (
     prioritization,
     project_manager,
     morning_briefing,
-    focus_mode,
     google_calendar,
 )
 
@@ -48,7 +47,6 @@ def test_agent_imports():
         ("Prioritization", prioritization),
         ("Project Manager", project_manager),
         ("Morning Briefing", morning_briefing),
-        ("Focus Mode", focus_mode),
         ("Google Calendar", google_calendar),
     ]
 

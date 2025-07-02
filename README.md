@@ -8,7 +8,6 @@ This project implements a multi-agent system for task management and prioritizat
 - **Todoist Integration**: The agents can interact with the Todoist API to manage tasks, projects, and comments.
 - **Google Calendar Integration**: The agents can manage Google Calendar events.
 - **Smart Prioritization**: The `SmartPrioritizationAgent` uses a RIN (Recency, Impact, Next-Action Effort) framework to help users prioritize their tasks.
-- **Focus Mode**: The `FocusModeAgent` helps users focus on a single task by hiding all other tasks.
 - **Morning Briefing**: The `MorningBriefingAgent` provides a summary of the day's priorities.
 - **Project Planning**: The `ProjectManagerAgent` can break down complex goals into actionable tasks.
 
@@ -65,10 +64,6 @@ You can interact with the agents using the `adk` command-line tool. The main ent
 -   **Plan a new project:**
     ```bash
     adk web "plan my product launch"
-    ```
--   **Focus on a task:**
-    ```bash
-    adk web "I want to focus on a task"
     ```
 -   **Create a calendar event:**
     ```bash
