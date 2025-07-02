@@ -10,6 +10,9 @@ This project implements a multi-agent system for task management and prioritizat
 - **Smart Prioritization**: The `SmartPrioritizationAgent` uses a RIN (Recency, Impact, Next-Action Effort) framework to help users prioritize their tasks.
 - **Morning Briefing**: The `MorningBriefingAgent` provides a summary of the day's priorities.
 - **Project Planning**: The `ProjectManagerAgent` can break down complex goals into actionable tasks.
+- **Task Management Guidelines**: Agents follow specific guidelines for organizing task information:
+  - **Task Descriptions**: Store context, background information, requirements, and static information
+  - **Task Comments**: Record actions taken, progress updates, decisions made, and dynamic information
 
 ## Getting Started
 
@@ -61,6 +64,10 @@ You can interact with the agents using the `adk` command-line tool. The main ent
     ```bash
     adk web "prioritize my tasks"
     ```
+-   **Smart prioritization and backlog grooming:**
+    ```bash
+    adk web "groom my backlog"
+    ```
 -   **Plan a new project:**
     ```bash
     adk web "plan my product launch"
@@ -69,6 +76,34 @@ You can interact with the agents using the `adk` command-line tool. The main ent
     ```bash
     adk web "schedule a meeting with John tomorrow at 2pm"
     ```
+
+## Project Structure
+
+```
+TaskAgent/
+├── agents/
+│   ├── __init__.py
+│   └── agents.py              # All agent definitions
+├── tools/
+│   ├── __init__.py
+│   ├── todoist_tools.py       # Todoist API integration
+│   └── google_calendar_tools.py # Google Calendar API integration
+├── config/                    # Configuration files (empty)
+├── utils/                     # Utility functions (empty)
+├── main.py                    # Main entry point
+├── requirements.txt           # Python dependencies
+├── .env_sample               # Environment variables template
+└── README.md                 # This file
+```
+
+## Available Agents
+
+- **CoordinatorAgent**: Routes user requests to appropriate specialized agents
+- **PrioritizationAgent**: Basic priority analysis based on due dates and existing priorities
+- **SmartPrioritizationAgent**: Advanced backlog grooming with RIN framework (Recency, Impact, Next-Action Effort)
+- **ProjectManagerAgent**: Breaks down complex goals into actionable tasks
+- **MorningBriefingAgent**: Provides a summary of the day's top priorities
+- **GoogleCalendarAgent**: Manages Google Calendar events
 
 ## Roadmap
 
