@@ -4,3 +4,39 @@
 .ipynb_checkpoints
 .vscode
 __pycache__/
+
+# Google Calendar credentials and tokens
+credentials.json
+token.json
+
+# Additional Python cache directories
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# IDE and editor files
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini

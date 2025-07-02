@@ -116,3 +116,18 @@ Here are some potential future enhancements for this project:
 -   **More Sophisticated Prioritization**: Enhance the `SmartPrioritizationAgent` with more advanced machine learning models to provide even more accurate and personalized prioritizations.
 -   **Long-Term Memory**: Implement a mechanism for the agents to remember user preferences and context across conversations.
 -   **Testing and Evaluation Framework**: Develop a comprehensive framework for testing and evaluating the performance of the agents.
+
+## Security
+
+This project handles sensitive information through environment variables and external credential files. Here's how to keep your data secure:
+
+### **Never Commit Sensitive Files**
+The following files contain sensitive information and should never be committed to version control:
+- `.env` - Contains your actual API tokens
+- `credentials.json` - Google Calendar OAuth credentials  
+- `token.json` - Google Calendar access/refresh tokens
+
+### **Safe Setup Process**
+1. Copy `.env_sample` to `.env` and add your actual API tokens
+2. Download your `credentials.json` from Google Cloud Console
+3. The `token.json` file will be created automatically on first run
