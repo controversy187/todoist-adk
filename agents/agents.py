@@ -31,7 +31,11 @@ prioritization = Agent(
 
 **Task Management Guidelines:**
 - **Task Descriptions**: Use the task description field to store context, background information, requirements, and any static information that helps understand what the task is about.
-- **Task Comments**: Use comments to record actions taken, progress updates, decisions made, and any dynamic information that shows the history of work on the task.""",
+- **Task Comments**: Use comments to record actions taken, progress updates, decisions made, and any dynamic information that shows the history of work on the task.
+
+**Escalation:**
+If you receive a request that you cannot handle with your available tools or instructions, do not attempt to answer it yourself. Instead, escalate the request back to the CoordinatorAgent so it can be routed to the appropriate agent.
+""",
     tools=[get_open_tasks, create_task],
 )
 
@@ -43,7 +47,11 @@ project_manager = Agent(
 
 **Task Management Guidelines:**
 - **Task Descriptions**: Place all context, requirements, background information, and static details about what the task involves in the task description field. This should include any information someone would need to understand what the task is about.
-- **Task Comments**: Reserve comments for tracking actions taken, progress updates, decisions made during execution, and any dynamic information that shows the history of work on the task.""",
+- **Task Comments**: Reserve comments for tracking actions taken, progress updates, decisions made during execution, and any dynamic information that shows the history of work on the task.
+
+**Escalation:**
+If you receive a request that you cannot handle with your available tools or instructions, do not attempt to answer it yourself. Instead, escalate the request back to the CoordinatorAgent so it can be routed to the appropriate agent.
+""",
     tools=[get_open_tasks, create_task],
 )
 
@@ -104,7 +112,11 @@ smart_prioritization = Agent(
 - update_task: Update task properties (task_id, content, priority, description, due_string).
 - create_task: Create new tasks (especially for breaking down larger ones).
 
-Begin by getting the open tasks and performing a deep analysis on each one.""",
+Begin by getting the open tasks and performing a deep analysis on each one.
+
+**Escalation:**
+If you receive a request that you cannot handle with your available tools or instructions, do not attempt to answer it yourself. Instead, escalate the request back to the CoordinatorAgent so it can be routed to the appropriate agent.
+""",
     tools=[
         get_open_tasks,
         get_task_details,
@@ -120,7 +132,10 @@ morning_briefing = Agent(
     model="gemini-2.5-flash",
     description="Provides a summary of the day's priorities.",
     instruction="""Your goal is to provide the user with a morning briefing of their top 3-5 priorities. You will get the priorities from the PrioritizationAgent and format them into a clear and concise summary.
-    """,
+
+**Escalation:**
+If you receive a request that you cannot handle with your available tools or instructions, do not attempt to answer it yourself. Instead, escalate the request back to the CoordinatorAgent so it can be routed to the appropriate agent.
+""",
     sub_agents=[prioritization],
 )
 
@@ -129,7 +144,10 @@ google_calendar = Agent(
     model="gemini-2.5-flash",
     description="Manages Google Calendar events.",
     instruction="""Your goal is to help the user manage their Google Calendar. You can create, update, delete, and list events. You can also create new calendars.
-    """,
+
+**Escalation:**
+If you receive a request that you cannot handle with your available tools or instructions, do not attempt to answer it yourself. Instead, escalate the request back to the CoordinatorAgent so it can be routed to the appropriate agent.
+""",
     tools=[
         get_calendars,
         create_calendar,
